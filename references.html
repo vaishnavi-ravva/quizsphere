@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QuizSphere | References</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  min-height:100vh;
+  padding-top:70px;
+  display:flex;
+  flex-direction:column; /* ✅ FIX */
+  background:linear-gradient(to right,#141E30,#243B55);
+  color:#fff;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+/* PAGE WRAPPER (SAME AS CATEGORY) */
+.page-wrapper{
+  flex:1; /* ✅ allows footer to go down */
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* CONTENT BOX (UNCHANGED UI) */
+.box{
+  background:rgba(255,255,255,0.08);
+  padding:30px;
+  border-radius:14px;
+  max-width:800px;
+  width:90%;
+  box-shadow:0 15px 35px rgba(0,0,0,0.4);
+}
+
+h2{margin-bottom:15px;}
+ul{line-height:1.8;color:#ddd;}
+</style>
+</head>
+
+<body>
+
+<!-- ================= CONTENT ================= -->
+<div class="page-wrapper">
+  <div class="box">
+    <h2>References</h2>
+    <ul>
+      <li>NCERT Textbooks</li>
+      <li>GeeksForGeeks</li>
+      <li>W3Schools</li>
+      <li>MDN Web Docs</li>
+      <li>Official University Materials</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ================= GLOBAL FOOTER ================= -->
+<div id="footer"></div>
+
+<!-- ================= GLOBAL FOOTER LOADER ================= -->
+<script src="/layout.js"></script>
+
+</body>
+</html>

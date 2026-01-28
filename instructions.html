@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QuizSphere | Instructions</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+/* BODY (SAME AS CATEGORY) */
+body{
+  margin:0;
+  min-height:100vh;
+  padding-top:70px;
+  background:linear-gradient(to right,#141E30,#243B55);
+  color:#fff;
+}
+
+/* PAGE WRAPPER */
+.page-wrapper{
+  min-height:calc(100vh - 70px);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* CONTENT CONTAINER (UNCHANGED VISUALLY) */
+.container{
+  width:95%;
+  max-width:800px;
+  background:rgba(255,255,255,0.08);
+  padding:30px;
+  border-radius:14px;
+  box-shadow:0 15px 35px rgba(0,0,0,0.4);
+}
+
+h2{
+  margin-bottom:15px;
+}
+
+ul{
+  padding-left:20px;
+  color:#ddd;
+  line-height:1.7;
+}
+
+.btn{
+  margin-top:25px;
+  padding:12px 28px;
+  border:none;
+  border-radius:8px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  background:linear-gradient(90deg,#ff9800,#ff5722);
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= CONTENT ================= -->
+<div class="page-wrapper">
+  <div class="container">
+    <h2>Quiz Instructions</h2>
+    <ul id="instructionsList"></ul>
+
+    <button class="btn" onclick="proceed()">Proceed</button>
+  </div>
+</div>
+
+<script>
+const mode = localStorage.getItem("qs_mode");
+
+const instructions = {
+  practice: [
+    "This is a practice quiz.",
+    "No time limit.",
+    "No certificate will be provided.",
+    "Use this mode for learning."
+  ],
+  challenge: [
+    "This is a challenge quiz.",
+    "Timed and accuracy-based.",
+    "Certificate will be provided after completion.",
+    "Once started, cannot be paused."
+  ]
+};
+
+const list = document.getElementById("instructionsList");
+instructions[mode].forEach(item=>{
+  const li = document.createElement("li");
+  li.textContent = item;
+  list.appendChild(li);
+});
+
+function proceed(){
+  if(mode === "challenge"){
+    window.location.href = "payment.html";
+  } else {
+    window.location.href = "quiz.html";
+  }
+}
+</script>
+
+<!-- ================= GLOBAL FOOTER ================= -->
+<div id="footer"></div>
+
+<!-- ================= GLOBAL FOOTER LOADER ================= -->
+<script src="/layout.js"></script>
+
+</body>
+</html>

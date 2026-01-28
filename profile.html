@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QuizSphere | My Profile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+/* ===== BODY ===== */
+body{
+  margin:0;
+  min-height:100vh;
+  padding-top:70px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(to right,#141E30,#243B55);
+}
+
+/* ===== NAVBAR ===== */
+.navbar{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:60px;
+  background:rgba(0,0,0,0.8);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+  z-index:1000;
+}
+
+.logo{
+  font-size:20px;
+  font-weight:bold;
+  color:#ff9800;
+}
+
+.nav-links a{
+  color:#fff;
+  margin-left:20px;
+  text-decoration:none;
+  font-size:14px;
+}
+
+.nav-links a:hover{
+  color:#ff9800;
+}
+
+/* ===== CARD ===== */
+.profile-card{
+  background:#111;
+  color:#fff;
+  width:95%;
+  max-width:420px;
+  padding:30px;
+  border-radius:14px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.6);
+  text-align:center;
+}
+
+.profile-card h2{
+  margin-bottom:18px;
+}
+
+/* ===== INPUTS ===== */
+input{
+  width:100%;
+  padding:12px;
+  margin-bottom:14px;
+  border:none;
+  border-radius:8px;
+  outline:none;
+  font-size:14px;
+  background:#2e2e2e;
+  color:#fff;
+}
+
+input:disabled{
+  opacity:0.85;
+}
+
+/* ===== BUTTONS ===== */
+.btn{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:8px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.edit{background:#1976d2;color:#fff;}
+.save{background:#2e7d32;color:#fff;display:none;}
+.tasks{background:#455a64;color:#fff;}
+.back{background:#9e9e9e;color:#000;}
+
+/* ===== TASKS ===== */
+.tasks-box{
+  display:none;
+  margin-top:15px;
+  background:#1c1c1c;
+  padding:12px;
+  border-radius:8px;
+  font-size:13px;
+  text-align:left;
+  max-height:220px;
+  overflow:auto;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<div class="navbar">
+  <div class="logo">QuizSphere</div>
+  <div class="nav-links">
+    <a href="mode.html">Home</a>
+    <a href="profile.html">Profile</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+</div>
+
+<!-- ===== PROFILE CARD ===== -->
+<div class="profile-card">
+  <h2>My Profile</h2>
+
+  <input id="name" placeholder="Full Name" disabled>
+  <input type="date" id="dob" disabled>
+  <input id="bank" placeholder="Bank Account Number" disabled>
+  <input id="ifsc" placeholder="IFSC Code" disabled>
+
+  <button class="btn edit" id="editBtn" onclick="enableEdit()">Edit Profile</button>
+  <button class="btn tasks" onclick="toggleTasks()">My Tasks</button>
+  <button class="btn save" id="saveBtn" onclick="saveProfile()">Save Changes</button>
+  <button class="btn back" onclick="goBack()">Back</button>
+
+  <div class="tasks-box" id="tasksBox"></div>
+</div>
+
+<script>
+/* ===== LOGIN GUARD ===== */
+if(!localStorage.getItem("qs_user")){
+  location.href = "login.html";
+}
+
+/* ===== ELEMENT REFERENCES (IMPORTANT FIX) ===== */
+const nameInput = document.getElementById("name");
+const dobInput = document.getElementById("dob");
+const bankInput = document.getElementById("bank");
+const ifscInput = document.getElementById("ifsc");
+const editBtn = document.getElementById("editBtn");
+const saveBtn = document.getElementById("saveBtn");
+const tasksBox = document.getElementById("tasksBox");
+
+/* ===== LOAD PROFILE ===== */
+let profile = JSON.parse(localStorage.getItem("qs_profile") || "{}");
+
+nameInput.value = profile.name || "";
+dobInput.value = profile.dob || "";
+bankInput.value = profile.bank || "";
+ifscInput.value = profile.ifsc || "";
+
+/* ===== ENABLE EDIT ===== */
+function enableEdit(){
+  [nameInput, dobInput, bankInput, ifscInput].forEach(i => i.disabled = false);
+  editBtn.style.display = "none";
+  saveBtn.style.display = "block";
+}
+
+/* ===== SAVE PROFILE (FIXED & WORKING) ===== */
+function saveProfile(){
+  const updatedProfile = {
+    name: nameInput.value.trim(),
+    dob: dobInput.value,
+    bank: bankInput.value.trim(),
+    ifsc: ifscInput.value.trim()
+  };
+
+  if(!updatedProfile.name || !updatedProfile.dob){
+    alert("Name and Date of Birth are required");
+    return;
+  }
+
+  localStorage.setItem("qs_profile", JSON.stringify(updatedProfile));
+  localStorage.setItem("qs_user", updatedProfile.name);
+
+  profile = updatedProfile;
+
+  alert("Profile updated successfully");
+
+  [nameInput, dobInput, bankInput, ifscInput].forEach(i => i.disabled = true);
+  saveBtn.style.display = "none";
+  editBtn.style.display = "block";
+}
+
+/* ===== MY TASKS ===== */
+function toggleTasks(){
+  tasksBox.style.display =
+    tasksBox.style.display === "block" ? "none" : "block";
+
+  const history = JSON.parse(localStorage.getItem("qs_history") || "[]");
+
+  if(history.length === 0){
+    tasksBox.innerHTML = "<p>No quiz attempts yet.</p>";
+    return;
+  }
+
+  tasksBox.innerHTML = history.map(h => `
+    <p>
+      <b>${h.domain.toUpperCase()}</b> |
+      ${h.mode} |
+      Score: ${h.score}/10<br>
+      <small>${h.date}</small>
+    </p>
+    <hr>
+  `).join("");
+}
+
+/* ===== BACK ===== */
+function goBack(){
+  location.href = "mode.html";
+}
+
+/* ===== LOGOUT ===== */
+function logout(){
+  localStorage.removeItem("qs_user");
+  location.href = "login.html";
+}
+</script>
+
+</body>
+</html>

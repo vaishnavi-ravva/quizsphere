@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QuizSphere | About</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  padding-top:70px;
+  display:flex;
+  flex-direction:column; /* ✅ FIX */
+  background:#121212;
+  color:#fff;
+}
+
+/* PUSH FOOTER DOWN */
+#footer{
+  margin-top:auto;
+}
+
+/* ===== NAVBAR ===== */
+.navbar{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:60px;
+  background:rgba(0,0,0,0.85);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+  z-index:1000;
+}
+
+.logo{
+  font-size:20px;
+  font-weight:bold;
+  color:#ff9800;
+}
+
+.nav-links a{
+  color:#fff;
+  margin-left:18px;
+  text-decoration:none;
+  font-size:14px;
+}
+
+.nav-links a:hover{
+  color:#ff9800;
+}
+
+/* ===== PAGE WRAPPER ===== */
+.page-wrapper{
+  flex:1;
+}
+
+/* ===== PAGE CONTENT ===== */
+.container{
+  width:95%;
+  max-width:900px;
+  margin:auto;
+}
+
+.about-card{
+  background:#1e1e1e;
+  padding:30px;
+  border-radius:14px;
+}
+
+.about-card h1{
+  color:#ff9800;
+  margin-bottom:10px;
+}
+
+.about-card p{
+  font-size:14px;
+  line-height:1.7;
+  color:#ddd;
+}
+
+.about-card ul{
+  margin-top:15px;
+  padding-left:18px;
+}
+
+.about-card li{
+  margin-bottom:8px;
+}
+
+/* ===== REFERENCES OVERLAY ===== */
+.references-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.75);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:2000;
+}
+
+.references-box{
+  background:#1e1e1e;
+  width:90%;
+  max-width:900px;
+  padding:25px;
+  border-radius:14px;
+}
+
+.references-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.references-header h2{
+  color:#ff9800;
+}
+
+.references-content{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+}
+
+.references-content h3{
+  color:#ffc107;
+}
+
+.references-content a{
+  display:block;
+  color:#ddd;
+  margin:6px 0;
+  text-decoration:none;
+}
+
+.references-content a:hover{
+  color:#ff9800;
+}
+
+.close-btn{
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<div class="navbar">
+  <div class="logo">QuizSphere</div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="mode.html">Mode</a>
+    <a href="category.html">Category</a>
+    <a href="domain.html">Domain</a>
+    <a href="tutorials.html">Tutorials</a>
+    <a href="#" onclick="openReferences()">References</a>
+    <a href="about.html">About</a>
+  </div>
+</div>
+
+<!-- ===== CONTENT ===== -->
+<div class="page-wrapper">
+  <div class="container">
+    <div class="about-card">
+      <h1>About QuizSphere</h1>
+
+      <p>
+        QuizSphere is a modern online quiz and learning platform designed to help
+        students and professionals improve their knowledge through practice,
+        challenges, and guided learning.
+      </p>
+
+      <p>
+        The platform combines structured quizzes with tutorials and reference
+        materials, making it easy to learn and validate skills in one place.
+      </p>
+
+      <ul>
+        <li>✔ Practice & Challenge modes</li>
+        <li>✔ Domain-based quizzes</li>
+        <li>✔ Tutorials & learning videos</li>
+        <li>✔ Quick references</li>
+        <li>✔ Certificates on completion</li>
+      </ul>
+
+      <p style="margin-top:15px;">
+        QuizSphere is built to be simple, intuitive, and effective for learners
+        at all levels.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== REFERENCES OVERLAY ===== -->
+<div class="references-overlay" id="referencesOverlay">
+  <div class="references-box">
+    <div class="references-header">
+      <h2>References</h2>
+      <span class="close-btn" onclick="closeReferences()">✖</span>
+    </div>
+
+    <div class="references-content">
+      <div>
+        <h3>HTML & CSS</h3>
+        <a>HTML Reference</a>
+        <a>CSS Reference</a>
+      </div>
+
+      <div>
+        <h3>JavaScript</h3>
+        <a>JavaScript Reference</a>
+        <a>JSON Reference</a>
+      </div>
+
+      <div>
+        <h3>Backend</h3>
+        <a>Python Reference</a>
+        <a>SQL Reference</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openReferences(){
+  document.getElementById("referencesOverlay").style.display="flex";
+}
+function closeReferences(){
+  document.getElementById("referencesOverlay").style.display="none";
+}
+</script>
+
+<!-- ================= GLOBAL FOOTER ================= -->
+<div id="footer"></div>
+
+<!-- ================= GLOBAL LAYOUT LOADER ================= -->
+<script src="/layout.js"></script>
+
+</body>
+</html>

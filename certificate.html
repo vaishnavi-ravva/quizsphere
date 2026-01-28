@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QuizSphere | Certificate</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+/* BODY (SAME AS CATEGORY) */
+body{
+  margin:0;
+  min-height:100vh;
+  padding-top:70px;
+  background:linear-gradient(to right,#141E30,#243B55);
+}
+
+/* PAGE WRAPPER (KEY FIX) */
+.page-wrapper{
+  min-height:calc(100vh - 70px);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* CERTIFICATE */
+.certificate{
+  background:#fff;
+  width:95%;
+  max-width:700px;
+  padding:40px;
+  border-radius:16px;
+  box-shadow:0 25px 60px rgba(0,0,0,0.4);
+  text-align:center;
+  border:8px solid #ff9800;
+}
+
+.certificate h1{
+  margin-bottom:10px;
+  color:#ff9800;
+}
+.certificate p{
+  font-size:16px;
+  color:#555;
+}
+.name{
+  font-size:26px;
+  font-weight:bold;
+  color:#000;
+  margin:15px 0;
+}
+.domain{
+  font-weight:bold;
+  color:#1976d2;
+}
+.date{
+  margin-top:20px;
+  font-size:14px;
+  color:#777;
+}
+.actions{
+  margin-top:30px;
+}
+.actions button{
+  padding:12px 20px;
+  font-size:15px;
+  font-weight:bold;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  margin:6px;
+}
+.back{background:#1976d2;color:#fff;}
+.print{background:#2e7d32;color:#fff;}
+</style>
+</head>
+
+<body>
+
+<!-- ================= GLOBAL HEADER ================= -->
+<div id="header"></div>
+
+<!-- ================= CONTENT ================= -->
+<div class="page-wrapper">
+  <div class="certificate" id="certificateBox"></div>
+</div>
+
+<script>
+/* ===== STRICT ACCESS GUARD ===== */
+const cert = JSON.parse(localStorage.getItem("qs_certificate"));
+
+if(!cert){
+  alert("No certificate available.\nComplete Challenge Mode with 10/10.");
+  location.href="mode.html";
+}
+
+/* ===== DOMAIN NAME MAP ===== */
+const domainMap = {
+  cse: "Computer Science",
+  ece: "Electronics",
+  eee: "Electrical Engineering",
+  civil: "Civil Engineering",
+  gk: "General Knowledge",
+  aptitude: "Aptitude",
+  english: "English",
+  sports: "Sports",
+  movies: "Movies",
+  fun: "Fun"
+};
+
+const userName = cert.name || "QuizSphere User";
+const domainName = domainMap[cert.domain.toLowerCase()] || cert.domain;
+const issueDate = cert.date || new Date().toLocaleDateString();
+
+/* ===== RENDER CERTIFICATE ===== */
+document.getElementById("certificateBox").innerHTML = `
+  <h1>Certificate of Achievement</h1>
+
+  <p>This is to certify that</p>
+
+  <div class="name">${userName}</div>
+
+  <p>
+    has successfully completed the
+    <span class="domain">${domainName}</span> quiz
+    in <b>Challenge Mode</b> with a perfect score of <b>10 / 10</b>.
+  </p>
+
+  <div class="date">
+    Date Issued: ${issueDate}
+  </div>
+
+  <div class="actions">
+    <button class="print" onclick="printCert()">Download / Print</button>
+    <button class="back" onclick="goBack()">Back to Mode</button>
+  </div>
+`;
+
+/* ===== ACTIONS ===== */
+function printCert(){
+  window.print();
+}
+
+function goBack(){
+  localStorage.removeItem("qs_certificate");
+  location.href="mode.html";
+}
+</script>
+
+<!-- ================= GLOBAL FOOTER ================= -->
+<div id="footer"></div>
+
+<!-- ================= GLOBAL FOOTER LOADER ================= -->
+<script src="/layout.js"></script>
+
+</body>
+</html>

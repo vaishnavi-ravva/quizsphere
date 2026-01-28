@@ -1,0 +1,206 @@
+<header class="qs-header">
+  <div class="qs-header-inner">
+
+    <!-- LOGO -->
+    <div class="qs-logo">
+      Quiz<span>Sphere</span>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="qs-nav">
+      <a href="index.html">Home</a>
+      <a href="practice.html">Practice</a>
+      <a href="challenge.html">Challenges</a>
+      <a href="quiz.html">Quizzes</a>
+      <a href="certificates.html">Certificates</a>
+      <a href="about.html">About</a>
+    </nav>
+
+    <!-- RIGHT ACTIONS -->
+    <div class="qs-actions">
+
+      <!-- THEME TOGGLE -->
+      <button id="themeToggle" onclick="toggleTheme()">🌙</button>
+
+      <!-- AUTH (LOGIN / REGISTER) -->
+      <div class="qs-auth" id="authLinks">
+        <a href="login.html" class="qs-link">Login</a>
+        <a href="register.html" class="qs-btn">Register</a>
+      </div>
+
+      <!-- PROFILE -->
+      <div class="profile-area" id="profileArea" onclick="toggleProfile()">
+        <div class="profile-circle" id="profileCircle">U</div>
+        <div class="profile-menu" id="profileMenu">
+          <a href="profile.html">My Profile</a>
+          <a href="certificate.html">My Certificate</a>
+          <a href="#" onclick="logout()">Logout</a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</header>
+
+<style>
+/* ===== HEADER BASE ===== */
+.qs-header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:#0f172a;
+  box-shadow:0 2px 8px rgba(0,0,0,0.4);
+}
+
+.qs-header-inner{
+  max-width:1200px;
+  margin:auto;
+  padding:14px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+/* ===== LOGO ===== */
+.qs-logo{
+  font-size:24px;
+  font-weight:800;
+  color:#ffffff;
+}
+.qs-logo span{
+  color:#22c55e;
+}
+
+/* ===== NAV ===== */
+.qs-nav a{
+  margin:0 12px;
+  color:#e5e7eb;
+  text-decoration:none;
+  font-weight:500;
+}
+.qs-nav a:hover{
+  color:#22c55e;
+}
+
+/* ===== ACTIONS ===== */
+.qs-actions{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+#themeToggle{
+  background:none;
+  border:1px solid #334155;
+  color:#e5e7eb;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* ===== AUTH ===== */
+.qs-auth{
+  display:flex;
+  align-items:center;
+}
+.qs-link{
+  color:#e5e7eb;
+  text-decoration:none;
+  margin-right:12px;
+}
+.qs-btn{
+  background:#22c55e;
+  color:#000;
+  padding:6px 14px;
+  border-radius:6px;
+  text-decoration:none;
+  font-weight:600;
+}
+.qs-btn:hover{
+  background:#16a34a;
+}
+
+/* ===== PROFILE ===== */
+.profile-area{
+  position:relative;
+  cursor:pointer;
+  display:none;
+}
+.profile-circle{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#22c55e;
+  color:#000;
+  font-weight:bold;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.profile-menu{
+  position:absolute;
+  right:0;
+  top:48px;
+  background:#0b1120;
+  border-radius:8px;
+  width:160px;
+  display:none;
+  flex-direction:column;
+}
+.profile-menu a{
+  padding:12px;
+  color:#fff;
+  text-decoration:none;
+}
+.profile-menu a:hover{
+  background:#1e293b;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width:768px){
+  .qs-nav{display:none;}
+}
+</style>
+
+<script>
+/* ===== PROFILE + AUTH SWITCH ===== */
+document.addEventListener("DOMContentLoaded", () => {
+  const user = localStorage.getItem("qs_user");
+  const authLinks = document.getElementById("authLinks");
+  const profileArea = document.getElementById("profileArea");
+
+  if(user){
+    authLinks.style.display = "none";
+    profileArea.style.display = "block";
+    document.getElementById("profileCircle").innerText =
+      user.charAt(0).toUpperCase();
+  }
+});
+
+function toggleProfile(){
+  const menu = document.getElementById("profileMenu");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
+
+function logout(){
+  localStorage.clear();
+  location.href = "login.html";
+}
+
+/* ===== THEME ===== */
+(function(){
+  const saved = localStorage.getItem("qs_theme");
+  if(saved === "light"){
+    document.body.classList.add("light-theme");
+    document.getElementById("themeToggle").textContent = "☀️";
+  }
+})();
+
+function toggleTheme(){
+  document.body.classList.toggle("light-theme");
+  const isLight = document.body.classList.contains("light-theme");
+  document.getElementById("themeToggle").textContent = isLight ? "☀️" : "🌙";
+  localStorage.setItem("qs_theme", isLight ? "light" : "dark");
+}
+</script>

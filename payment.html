@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QuizSphere | Payment</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+/* BODY (SAME AS CATEGORY STYLE) */
+body{
+  margin:0;
+  min-height:100vh;
+  padding-top:70px;
+  background:linear-gradient(to right,#141E30,#243B55);
+  color:#fff;
+}
+
+/* PAGE WRAPPER */
+.page-wrapper{
+  min-height:calc(100vh - 70px);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* PAYMENT CARD (UNCHANGED UI) */
+.card{
+  background:rgba(255,255,255,0.08);
+  padding:30px;
+  width:90%;
+  max-width:420px;
+  border-radius:14px;
+  text-align:center;
+  box-shadow:0 15px 35px rgba(0,0,0,0.4);
+}
+
+.card h2{
+  margin-bottom:10px;
+}
+
+.card p{
+  font-size:14px;
+  color:#ccc;
+  margin-bottom:25px;
+}
+
+.amount{
+  font-size:26px;
+  font-weight:bold;
+  margin-bottom:20px;
+}
+
+.btn{
+  padding:12px 30px;
+  border:none;
+  border-radius:8px;
+  font-size:15px;
+  font-weight:bold;
+  background:linear-gradient(90deg,#ff9800,#ff5722);
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= CONTENT ================= -->
+<div class="page-wrapper">
+  <div class="card">
+    <h2>Challenge Mode Payment</h2>
+    <p>Complete payment to start the challenge quiz</p>
+
+    <div class="amount">₹20</div>
+
+    <button class="btn" onclick="pay()">Pay & Start Quiz</button>
+  </div>
+</div>
+
+<script>
+function pay(){
+  alert("Payment Successful!");
+  window.location.href = "quiz.html";
+}
+</script>
+
+<!-- ================= GLOBAL FOOTER ================= -->
+<div id="footer"></div>
+
+<!-- ================= GLOBAL FOOTER LOADER ================= -->
+<script src="/layout.js"></script>
+
+</body>
+</html>

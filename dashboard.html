@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QuizSphere | Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+  margin:0;
+  height:100vh;
+}
+
+/* LAYOUT */
+.app{
+  display:flex;
+  height:100vh;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:240px;
+  background:#141E30;
+  color:#fff;
+  padding:20px;
+}
+
+.sidebar h2{
+  text-align:center;
+  margin-bottom:30px;
+  letter-spacing:1px;
+}
+
+.sidebar ul{
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+
+.sidebar ul li{
+  padding:12px;
+  margin-bottom:8px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.sidebar ul li:hover,
+.sidebar ul li.active{
+  background:#243B55;
+}
+
+.sidebar .logout{
+  margin-top:40px;
+  background:#b30000;
+  text-align:center;
+}
+
+/* CONTENT */
+.content{
+  flex:1;
+  padding:30px;
+  overflow-y:auto;
+  background:#f4f6f9;
+}
+</style>
+</head>
+
+<body>
+
+<script>
+/* LOGIN CHECK */
+if(!localStorage.getItem("current_user")){
+  window.location.href = "login.html";
+}
+</script>
+
+<div class="app">
+
+  <!-- LEFT NAVIGATION -->
+  <aside class="sidebar">
+    <h2>QuizSphere</h2>
+    <ul>
+      <li data-page="instructions">Instructions</li>
+      <li data-page="mode">Mode</li>
+      <li data-page="category">Category</li>
+      <li data-page="domain">Domain</li>
+      <li data-page="quiz">Quiz</li>
+      <li data-page="result">Result</li>
+      <li class="logout" onclick="logout()">Logout</li>
+    </ul>
+  </aside>
+
+  <!-- RIGHT CONTENT -->
+  <main class="content" id="contentArea"></main>
+
+</div>
+
+<script>
+/* LOAD PAGE INTO CONTENT */
+function loadPage(page){
+  fetch(page + ".html")
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("contentArea").innerHTML = data;
+
+      // sidebar active state
+      document.querySelectorAll(".sidebar ul li[data-page]")
+        .forEach(li => {
+          li.classList.toggle("active", li.dataset.page === page);
+        });
+
+      // update URL without reload
+      history.replaceState(null, "", `dashboard.html?page=${page}`);
+    });
+}
+
+/* SIDEBAR CLICK HANDLING */
+document.querySelectorAll(".sidebar ul li[data-page]")
+  .forEach(li => {
+    li.onclick = () => loadPage(li.dataset.page);
+  });
+
+/* LOGOUT */
+function logout(){
+  localStorage.removeItem("current_user");
+  localStorage.removeItem("quiz_user");
+  window.location.href = "login.html";
+}
+
+/* AUTO LOAD BASED ON URL */
+const params = new URLSearchParams(window.location.search);
+const initialPage = params.get("page") || "instructions";
+loadPage(initialPage);
+</script>
+
+</body>
+</html>
