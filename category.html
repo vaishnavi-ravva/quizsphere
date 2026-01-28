@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QuizSphere | Select Category</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* =====================================================
+   THEME VARIABLES
+===================================================== */
+:root{
+  --bg-dark: linear-gradient(to right,#141E30,#243B55);
+  --bg-light: linear-gradient(to right,#f5f7fa,#e4ebf5);
+
+  --text-dark:#ffffff;
+  --text-light:#111111;
+
+  --navbar-dark:rgba(0,0,0,0.75);
+  --navbar-light:#ffffff;
+
+  --card-dark:rgba(255,255,255,0.08);
+  --card-light:#ffffff;
+
+  --accent:#ff9800;
+}
+
+/* DEFAULT DARK */
+body{
+  --bg-current:var(--bg-dark);
+  --text-current:var(--text-dark);
+  --navbar-current:var(--navbar-dark);
+  --card-current:var(--card-dark);
+}
+
+/* LIGHT THEME */
+body.light-theme{
+  --bg-current:var(--bg-light);
+  --text-current:var(--text-light);
+  --navbar-current:var(--navbar-light);
+  --card-current:var(--card-light);
+}
+
+/* RESET */
+*{
+  box-sizing:border-box;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+}
+
+/* BODY */
+body{
+  margin:0;
+  min-height:100vh;
+  padding-top:70px;
+  background:var(--bg-current);
+  color:var(--text-current);
+}
+
+/* NAVBAR */
+.navbar{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:60px;
+  background:var(--navbar-current);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+  z-index:1000;
+}
+
+.logo{
+  font-size:20px;
+  font-weight:bold;
+  color:var(--accent);
+}
+
+.nav-links{
+  display:flex;
+  gap:18px;
+}
+
+.nav-links a{
+  color:var(--text-current);
+  text-decoration:none;
+  font-size:15px;
+  padding:6px 10px;
+  border-radius:4px;
+}
+
+.nav-links a:hover{
+  background:var(--accent);
+  color:#000;
+}
+
+/* PROFILE */
+.profile-area{position:relative;cursor:pointer;}
+.profile-circle{
+  width:38px;height:38px;border-radius:50%;
+  background:var(--accent);color:#000;
+  font-weight:bold;
+  display:flex;align-items:center;justify-content:center;
+}
+.profile-menu{
+  position:absolute;right:0;top:48px;
+  background:#222;border-radius:8px;
+  width:160px;display:none;flex-direction:column;
+}
+.profile-menu a{
+  padding:12px;color:#fff;text-decoration:none;
+}
+.profile-menu a:hover{background:#333}
+
+/* CONTENT */
+.page-wrapper{
+  min-height:calc(100vh - 70px);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.container{
+  width:95%;
+  max-width:900px;
+  text-align:center;
+}
+
+p{color:#ccc;margin-bottom:30px;}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:25px;
+}
+
+.card{
+  background:var(--card-current);
+  padding:25px;
+  border-radius:14px;
+  box-shadow:0 15px 30px rgba(0,0,0,0.4);
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.card:hover{
+  transform:translateY(-8px);
+  background:var(--accent);
+  color:#000;
+}
+</style>
+</head>
+
+<body>
+
+<script>
+/* ===== AUTH + FLOW GUARD ===== */
+if(!localStorage.getItem("qs_user")){
+  location.href="login.html";
+}
+if(!localStorage.getItem("qs_mode")){
+  location.href="mode.html";
+}
+</script>
+
+<!-- ================= NAVBAR ================= -->
+<div class="navbar">
+  <div class="logo">QuizSphere</div>
+
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="mode.html">Mode</a>
+    <a href="category.html">Category</a>
+    <a href="domain.html">Domain</a>
+    <a href="tutorials.html">Tutorials</a>
+    <a href="references.html">References</a>
+    <a href="about.html">About</a>
+  </div>
+
+  <button id="themeToggle"
+    onclick="toggleTheme()"
+    style="background:none;border:1px solid #aaa;
+    color:inherit;padding:6px 10px;border-radius:6px;
+    cursor:pointer;margin-right:10px;">
+    🌙
+  </button>
+
+  <div class="profile-area" onclick="toggleProfile()">
+    <div class="profile-circle" id="profileCircle"></div>
+    <div class="profile-menu" id="profileMenu">
+      <a href="profile.html">My Profile</a>
+      <a href="certificate.html">My Certificate</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </div>
+  </div>
+</div>
+
+<!-- ================= CONTENT ================= -->
+<div class="page-wrapper">
+  <div class="container">
+    <h2>Select Category</h2>
+    <p>Choose your quiz category</p>
+
+    <div class="cards">
+      <div class="card" onclick="selectCategory('technical')">
+        <h3>Technical</h3>
+        <p>Engineering & programming related quizzes</p>
+      </div>
+
+      <div class="card" onclick="selectCategory('non-technical')">
+        <h3>Non-Technical</h3>
+        <p>Aptitude, reasoning & general knowledge</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= FOOTER (ADDED – ONLY REQUIREMENT) ================= -->
+<div id="footer"></div>
+
+<script>
+/* PROFILE */
+const profile = JSON.parse(localStorage.getItem("qs_profile")||"{}");
+const userName = profile.name || localStorage.getItem("qs_user") || "U";
+profileCircle.innerText = userName.charAt(0).toUpperCase();
+
+function toggleProfile(){
+  profileMenu.style.display =
+    profileMenu.style.display==="flex"?"none":"flex";
+}
+
+function logout(){
+  localStorage.clear();
+  location.href="login.html";
+}
+
+/* CATEGORY LOGIC */
+function selectCategory(category){
+  localStorage.setItem("qs_category", category);
+  location.href="domain.html";
+}
+
+/* THEME */
+(function(){
+  const saved = localStorage.getItem("qs_theme");
+  if(saved==="light"){
+    document.body.classList.add("light-theme");
+    themeToggle.textContent="☀️";
+  }
+})();
+
+function toggleTheme(){
+  document.body.classList.toggle("light-theme");
+  const isLight=document.body.classList.contains("light-theme");
+  themeToggle.textContent=isLight?"☀️":"🌙";
+  localStorage.setItem("qs_theme",isLight?"light":"dark");
+}
+</script>
+
+<!-- ================= GLOBAL FOOTER LOADER ================= -->
+<script src="/layout.js"></script>
+
+</body>
+</html>
