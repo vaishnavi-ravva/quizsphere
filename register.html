@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QuizSphere | Registration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column; /* ✅ FIX */
+  background:url("https://images.unsplash.com/photo-1555949963-aa79dcee981c") center/cover no-repeat;
+}
+
+/* PUSH FOOTER DOWN */
+#footer{
+  margin-top:auto;
+}
+
+.overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.65);
+}
+
+/* PAGE WRAPPER (CENTER CONTENT, SAME UI) */
+.page-wrapper{
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+}
+
+/* REGISTRATION CARD (UNCHANGED UI) */
+.reg-card{
+  position:relative;
+  background:rgba(20,20,20,0.95);
+  color:#fff;
+  width:90%;
+  max-width:420px;
+  padding:30px;
+  border-radius:14px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.6);
+  text-align:center;
+}
+
+.reg-card h2{
+  margin-bottom:5px;
+}
+
+.reg-card p{
+  font-size:13px;
+  color:#ccc;
+  margin-bottom:20px;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  margin-bottom:14px;
+  border:none;
+  border-radius:8px;
+  outline:none;
+  font-size:14px;
+}
+
+.btn{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  background:linear-gradient(to right,#ff9800,#ff5722);
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.link{
+  margin-top:15px;
+  font-size:13px;
+}
+
+.link a{
+  color:#ff9800;
+  text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay"></div>
+
+<!-- ================= CONTENT ================= -->
+<div class="page-wrapper">
+  <div class="reg-card">
+    <h2>User Registration</h2>
+    <p>Please fill all details to create your account</p>
+
+    <input type="text" id="name" placeholder="Full Name">
+    <input type="date" id="dob">
+    <input type="password" id="password" placeholder="Password">
+    <input type="text" id="bank" placeholder="Bank Account Number">
+    <input type="text" id="ifsc" placeholder="IFSC Code">
+
+    <button class="btn" onclick="register()">Register</button>
+
+    <div class="link">
+      Already registered? <a href="login.html">Login here</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function register(){
+  const data = {
+    name: document.getElementById("name").value.trim(),
+    dob: document.getElementById("dob").value,
+    password: document.getElementById("password").value,
+    bank: document.getElementById("bank").value.trim(),
+    ifsc: document.getElementById("ifsc").value.trim()
+  };
+
+  for(let key in data){
+    if(data[key] === ""){
+      alert("Please fill all fields");
+      return;
+    }
+  }
+
+  localStorage.setItem("qs_user_profile", JSON.stringify(data));
+  alert("Registration successful!");
+  window.location.href = "login.html";
+}
+</script>
+
+<!-- ================= GLOBAL FOOTER ================= -->
+<div id="footer"></div>
+
+<!-- ================= GLOBAL LAYOUT LOADER ================= -->
+<script src="/layout.js"></script>
+
+</body>
+</html>

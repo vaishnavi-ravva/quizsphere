@@ -1,0 +1,321 @@
+/* ===============================
+   THEME VARIABLES
+=============================== */
+:root{
+  --bg-gradient-dark: linear-gradient(to right,#141E30,#243B55);
+  --bg-gradient-light: linear-gradient(to right,#f5f7fa,#e4ebf5);
+
+  --bg-overlay: rgba(0,0,0,0.75);
+  --text-main: #ffffff;
+  --text-muted: #dddddd;
+
+  --accent: #ff9800;
+  --accent-hover: #ffc107;
+
+  --card-bg: rgba(255,255,255,0.15);
+  --navbar-bg: rgba(0,0,0,0.9);
+}
+
+/* LIGHT THEME */
+body.light-theme{
+  --bg-overlay: rgba(255,255,255,0.9);
+  --text-main: #111111;
+  --text-muted: #444444;
+
+  --card-bg: #ffffff;
+  --navbar-bg: #ffffff;
+}
+
+/* ===============================
+   GLOBAL RESET
+=============================== */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Segoe UI", Arial, sans-serif;
+}
+
+/* IMPORTANT: FULL VIEWPORT */
+html, body{
+  width:100%;
+  height:100%;
+}
+
+/* ===============================
+   BODY BASE
+=============================== */
+body{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:var(--text-main);
+  background:none; /* background handled by ::before */
+}
+
+/* FULL SCREEN BACKGROUND FIX */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  background:var(--bg-gradient-dark);
+}
+
+/* LIGHT BACKGROUND */
+body.light-theme::before{
+  background:var(--bg-gradient-light);
+}
+
+/* ===============================
+   BACKGROUNDS (PAGE-SPECIFIC)
+=============================== */
+.login-bg::before{
+  background:url("/images/login-bg.jpg") center/cover no-repeat;
+}
+
+.instructions-bg::before{
+  background:url("/images/instructions-bg.jpg") center/cover no-repeat;
+}
+
+.practice-bg::before{
+  background:url("/images/index-bg.jpg") center/cover no-repeat;
+}
+
+.tech-bg::before,
+.nontech-bg::before,
+.quiz-bg::before{
+  background:url("/images/quiz-bg.jpg") center/cover no-repeat;
+}
+
+/* ===============================
+   MAIN CONTAINER
+=============================== */
+.box{
+  background:var(--bg-overlay);
+  padding:30px 35px;
+  border-radius:14px;
+  width:100%;
+  max-width:480px;
+  text-align:center;
+  box-shadow:0 15px 40px rgba(0,0,0,0.7);
+}
+
+/* ===============================
+   TEXT
+=============================== */
+h2{
+  margin-bottom:10px;
+  font-size:26px;
+}
+
+h3{
+  margin-bottom:6px;
+}
+
+.tagline{
+  font-size:14px;
+  color:var(--text-muted);
+  margin-bottom:20px;
+}
+
+/* ===============================
+   INPUTS
+=============================== */
+input{
+  width:100%;
+  padding:12px;
+  margin-bottom:12px;
+  border-radius:6px;
+  border:none;
+  outline:none;
+  font-size:14px;
+}
+
+input[type="checkbox"]{
+  width:auto;
+  margin-right:6px;
+}
+
+/* ===============================
+   BUTTONS
+=============================== */
+button{
+  width:100%;
+  padding:12px;
+  margin-top:15px;
+  background:var(--accent);
+  border:none;
+  border-radius:6px;
+  color:#000;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  background:var(--accent-hover);
+}
+
+button:disabled{
+  background:#777;
+  cursor:not-allowed;
+}
+
+/* ===============================
+   TYPE WIZARD
+=============================== */
+.type-container{
+  display:flex;
+  gap:20px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.type-card{
+  background:var(--card-bg);
+  padding:20px;
+  width:180px;
+  border-radius:12px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.type-card:hover{
+  background:var(--accent);
+  color:#000;
+}
+
+/* ===============================
+   DOMAIN WIZARD
+=============================== */
+.domain-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:15px;
+  margin-top:20px;
+}
+
+.domain-card{
+  background:var(--card-bg);
+  padding:15px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
+  transition:0.3s;
+}
+
+.domain-card:hover{
+  background:var(--accent);
+  color:#000;
+}
+
+/* ===============================
+   QUIZ
+=============================== */
+#progress{
+  font-size:14px;
+  color:var(--text-muted);
+  margin-bottom:10px;
+}
+
+#questionText{
+  margin:15px 0;
+}
+
+#options button{
+  width:100%;
+  margin-bottom:10px;
+  background:var(--card-bg);
+  color:var(--text-main);
+}
+
+#options button:hover{
+  background:var(--accent);
+  color:#000;
+}
+
+#options button.selected{
+  background:#4caf50;
+  color:#000;
+  font-weight:bold;
+}
+
+/* ===============================
+   LISTS
+=============================== */
+ul{
+  text-align:left;
+  font-size:14px;
+  margin-bottom:15px;
+}
+
+ul li{
+  margin-bottom:6px;
+}
+
+/* ===============================
+   NAVBAR
+=============================== */
+.navbar{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:60px;
+  background:var(--navbar-bg);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 30px;
+  z-index:1000;
+}
+
+.navbar .logo{
+  font-size:22px;
+  font-weight:bold;
+  color:var(--accent);
+}
+
+.navbar nav{
+  display:flex;
+  gap:20px;
+}
+
+.navbar nav a{
+  color:var(--text-main);
+  text-decoration:none;
+  font-size:15px;
+  padding:6px 10px;
+  border-radius:4px;
+  transition:0.3s;
+}
+
+.navbar nav a:hover{
+  background:var(--accent);
+  color:#000;
+}
+
+/* ===============================
+   PAGE WRAPPER
+=============================== */
+.page-wrapper{
+  width:100%;
+  min-height:100vh;
+  padding-top:80px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* ===============================
+   RESPONSIVE
+=============================== */
+@media (max-width:500px){
+  .box{
+    margin:15px;
+    padding:25px;
+  }
+}
