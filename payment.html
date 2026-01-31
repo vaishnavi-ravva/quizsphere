@@ -11,7 +11,7 @@
   font-family:Arial, Helvetica, sans-serif;
 }
 
-/* BODY (SAME AS CATEGORY STYLE) */
+/* BODY */
 body{
   margin:0;
   min-height:100vh;
@@ -28,7 +28,7 @@ body{
   align-items:center;
 }
 
-/* PAYMENT CARD (UNCHANGED UI) */
+/* CARD */
 .card{
   background:rgba(255,255,255,0.08);
   padding:30px;
@@ -65,6 +65,10 @@ body{
   cursor:pointer;
 }
 </style>
+
+<!-- Razorpay -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 </head>
 
 <body>
@@ -77,21 +81,47 @@ body{
 
     <div class="amount">₹20</div>
 
-    <button class="btn" onclick="pay()">Pay & Start Quiz</button>
+    <!-- IMPORTANT: type="button" -->
+    <button class="btn" type="button" onclick="pay()">Pay & Start Quiz</button>
   </div>
 </div>
 
 <script>
+/* 🔒 FLAG to prevent layout.js auto-redirect */
+window.IS_PAYMENT_PAGE = true;
+
 function pay(){
-  alert("Payment Successful!");
-  window.location.href = "quiz.html";
+
+  localStorage.removeItem("qs_rewarded");
+
+  var options = {
+    key: "rzp_test_S9M5NzvQ3UK5An",
+    amount: 2000,
+    currency: "INR",
+    name: "QuizSphere",
+    description: "Challenge Mode Entry Fee",
+
+    handler: function (response) {
+      localStorage.setItem("qs_paid", "yes");
+      localStorage.setItem("qs_mode", "challenge");
+
+      window.location.href = "quiz.html";
+    },
+
+    theme: {
+      color: "#ff9800"
+    }
+  };
+
+  var rzp = new Razorpay(options);
+  rzp.open();
 }
 </script>
 
-<!-- ================= GLOBAL FOOTER ================= -->
+<!-- ================= FOOTER ================= -->
 <div id="footer"></div>
 
-<!-- ================= GLOBAL FOOTER LOADER ================= -->
+<!-- layout.js loads AFTER payment logic -->
 <script src="/layout.js"></script>
 
 </body>
