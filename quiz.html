@@ -6,349 +6,619 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* ===== UI (UNCHANGED) ===== */
-html,body{width:100%;height:100%;margin:0;}
-body{
-  font-family:Arial, Helvetica, sans-serif;
-  background:linear-gradient(to right,#141E30,#243B55);
-  display:flex;justify-content:center;align-items:stretch;
-  overflow:hidden;
+
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
 }
-body.light{background:linear-gradient(to right,#f5f7fa,#e4ebf5);}
+
+body{
+  font-family:Arial;
+  background:linear-gradient(to right,#141E30,#243B55);
+  display:flex;
+  justify-content:center;
+  align-items:stretch;
+}
+
+/* ================= WIN SCREEN LAYOUT ================= */
+.win-screen{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.win-card{
+  background:#ffffff;
+  width:90%;
+  max-width:420px;
+  padding:40px 30px;
+  border-radius:24px;
+  text-align:center;
+  box-shadow:0 25px 60px rgba(0,0,0,0.4);
+  animation:winPop 0.5s ease;
+}
+
+@keyframes winPop{
+  from{transform:scale(0.7);opacity:0;}
+  to{transform:scale(1);opacity:1;}
+}
+
+.win-icon{font-size:64px;margin-bottom:10px;}
+
+.win-card h1{
+  font-size:30px;
+  color:#2e7d32;
+}
+
+.win-amount{font-size:22px;}
+.win-amount span{
+  font-size:28px;
+  font-weight:800;
+  color:#1b5e20;
+}
+
+.win-sub{font-size:14px;color:#555;margin-bottom:28px;}
+
+.win-actions{display:flex;gap:12px;}
+
+.win-actions button{
+  flex:1;
+  padding:12px;
+  border:none;
+  border-radius:14px;
+  font-weight:600;
+}
+
+.cert-btn{
+  background:linear-gradient(135deg,#43cea2,#185a9d);
+  color:white;
+}
+
+.mode-btn{background:#eceff1;}
+
+
 
 .quiz-box{
-  background:#fff;width:100%;height:100%;
-  padding:25px;box-sizing:border-box;
-  display:flex;flex-direction:column;
+  background:white;
+  width:100%;
+  height:100%;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
 }
-.header{display:flex;justify-content:space-between;font-weight:bold;}
-.timer{color:#d32f2f;}
 
-.tools{
-  position:fixed;top:10px;right:10px;
-  display:flex;flex-direction:column;gap:8px;z-index:1000;
+.header{
+  display:flex;
+  justify-content:space-between;
+  font-weight:bold;
+  position:relative;
 }
-.tools button{border:none;padding:6px 10px;border-radius:6px;cursor:pointer;}
+
+.timer{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  color:red;
+}
 
 .status-box{
-  display:flex;justify-content:space-around;
-  background:#f5f5f5;padding:10px;border-radius:8px;
-  margin:12px 0;font-size:13px;
+  display:flex;
+  justify-content:space-around;
+  background:#f5f5f5;
+  padding:10px;
+  border-radius:8px;
+  margin:10px 0;
 }
-
-.question-box{padding:12px;}
-.question-box.marked{background:#fff3e0;border-left:6px solid #ff9800;}
 
 .options button{
-  width:100%;padding:12px;margin-bottom:10px;
-  border-radius:8px;border:2px solid #ddd;
-  cursor:pointer;background:#f5f5f5;
+  width:100%;
+  padding:12px;
+  margin-bottom:10px;
+  border:2px solid #ddd;
+  border-radius:8px;
+  cursor:pointer;
 }
-.options button.selected{background:#bbdefb;border-color:#1976d2;}
 
-.controls{display:flex;gap:10px;margin-top:auto;}
-.controls button{
-  flex:1;padding:12px;border:none;border-radius:8px;
-  font-weight:bold;cursor:pointer;
+.options button.selected{
+  background:#bbdefb;
+  border-color:#1976d2;
 }
+
+.correct{
+  background:#c8e6c9;
+  border-left:6px solid green;
+  padding:10px;
+  margin-bottom:8px;
+}
+
+.wrong{
+  background:#ffcdd2;
+  border-left:6px solid red;
+  padding:10px;
+  margin-bottom:8px;
+}
+
+.controls{
+  display:flex;
+  gap:10px;
+  margin-top:auto;
+}
+
+.controls button{
+  flex:1;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
 .prev{background:#bdbdbd;}
 .next{background:#64b5f6;}
 .mark{background:#ffcc80;}
-.submit{background:#2e7d32;color:#fff;display:none;}
+.submit{background:#2e7d32;color:white;display:none;}
 
-.result-box{
-  background:#fff;max-width:900px;width:90%;
-  padding:25px;border-radius:14px;
-  box-shadow:0 20px 40px rgba(0,0,0,0.4);
-  margin:40px auto;
+#backBtn{
+  display:none;
+  background:#ff9800;
+  color:white;
 }
-.wrong{background:#ffebee;padding:12px;border-left:5px solid #d32f2f;margin-bottom:10px;}
-.correct{color:#2e7d32;font-weight:bold;}
+/* 🔒 LOCK REVIEW COLORS */
+.correct{
+  background:#c8e6c9 !important;
+  border-left:6px solid #2e7d32 !important;
+  color:#1b5e20 !important;
+}
+
+.wrong{
+  background:#ffcdd2 !important;
+  border-left:6px solid #c62828 !important;
+  color:#b71c1c !important;
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="tools">
-  <!-- Theme toggle -->
-  <button onclick="toggleTheme()" title="Toggle Theme">🌙</button>
-
-  <!-- Info button -->
-  <button onclick="showInfo()" title="Quiz Info">ℹ️</button>
-</div>
-
-
-<div class="quiz-box" id="quizBox">
+<div class="quiz-box">
 
   <div class="header">
     <div id="qNo"></div>
-    <div class="timer" id="timer"></div>
+    <div id="timer" class="timer"></div>
   </div>
 
   <div class="status-box">
     <div>Attempted: <span id="attempted">0</span></div>
-    <div>Not Attempted: <span id="notAttempted">10</span></div>
+    <div>Not Attempted: <span id="notAttempted">0</span></div>
     <div>Marked: <span id="markedCount">0</span></div>
   </div>
 
-  <div id="questionBox" class="question-box">
-    <h3 id="question"></h3>
-  </div>
+  <h3 id="question"></h3>
 
-  <div class="options" id="options"></div>
+  <div id="options" class="options"></div>
 
   <div class="controls">
     <button class="prev" onclick="prevQ()">Previous</button>
     <button class="mark" onclick="markQ()">Mark</button>
     <button class="next" onclick="nextQ()">Next</button>
     <button class="submit" id="submitBtn" onclick="submitQuiz()">Submit</button>
+    <button id="backBtn" onclick="goBack()">Back to Mode</button>
   </div>
 
+  <div id="winScreen" class="win-screen" style="display:none;">
+  <div class="win-card">
+    <div class="win-icon">🏆</div>
+    <h1>Congratulations!</h1>
+    <p class="win-amount">You Won <span>₹200</span></p>
+    <p class="win-sub">Perfect score achieved 🎯</p>
+    <div class="win-actions">
+      <button class="cert-btn" onclick="goCertificate()">Get Certificate</button>
+      <button class="mode-btn" onclick="goBack()">Back to Mode</button>
+    </div>
+  </div>
 </div>
 
 <script>
-/* ===== GUARDS ===== */
-if(!localStorage.getItem("qs_user")) location.href="login.html";
-if(!localStorage.getItem("qs_domain")) location.href="domain.html";
+const QUESTION_POOL = {
 
-/* ===== THEME ===== */
-function toggleTheme(){
-  const l=document.body.classList.toggle("light");
-  localStorage.setItem("qs_theme",l?"light":"dark");
-}
-if(localStorage.getItem("qs_theme")==="light"){
-  document.body.classList.add("light");
-}
+gk: [
 
-/* ===== INFO ===== */
-function showInfo(){
-  alert(`Quiz Rules:
-• 10 questions per domain
-• Submit only after all answered
-• Mark highlights questions
-• Practice: No timer
-• Challenge: 10 minutes
-• Tab switch auto-submit
-• 10/10 → ₹500 + Certificate`);
-}
+ {q:"Capital of India?",o:["New Delhi","Mumbai","Chennai","Kolkata"],a:0},
+ {q:"National animal?",o:["Tiger","Lion","Elephant","Horse"],a:0},
+ {q:"Largest ocean?",o:["Pacific","Indian","Atlantic","Arctic"],a:0},
+ {q:"Father of Nation?",o:["Gandhi","Nehru","Patel","Bose"],a:0},
+ {q:"Indian currency?",o:["Rupee","Dollar","Yen","Euro"],a:0},
+ {q:"Taj Mahal in?",o:["Agra","Delhi","Jaipur","Mumbai"],a:0},
+ {q:"Largest continent?",o:["Asia","Africa","Europe","America"],a:0},
+ {q:"National flower?",o:["Lotus","Rose","Lily","Sunflower"],a:0},
+ {q:"Flag colors?",o:["3","4","5","2"],a:0},
+ {q:"President of India?",o:["Droupadi Murmu","Modi","Kovind","Nehru"],a:0}
 
-/* ===== FULL QUESTION BANK (ALL DOMAINS, 10 EACH) ===== */
-const QB = {
-  cse:[
-    {q:"CPU stands for?",o:["Central Processing Unit","Control Program","Core Unit","None"],a:0},
-    {q:"RAM is?",o:["Permanent","Volatile","Secondary","None"],a:1},
-    {q:"HTML is?",o:["Markup Language","Programming","OS","None"],a:0},
-    {q:"Binary number system base?",o:["2","8","10","16"],a:0},
-    {q:"CSS is used for?",o:["Styling","Logic","Database","None"],a:0},
-    {q:"Python is?",o:["Programming Language","OS","Browser","None"],a:0},
-    {q:"DBMS stands for?",o:["Database Management System","Data Binary","None","None"],a:0},
-    {q:"HTTP is a?",o:["Protocol","Language","OS","None"],a:0},
-    {q:"IP stands for?",o:["Internet Protocol","Internal Process","None","None"],a:0},
-    {q:"Windows is an?",o:["Operating System","Language","CPU","None"],a:0}
-  ],
+],
 
-  ece:[
-    {q:"IC stands for?",o:["Integrated Circuit","Internal Chip","None","None"],a:0},
-    {q:"Frequency unit?",o:["Hz","Volt","Amp","None"],a:0},
-    {q:"Diode allows current?",o:["One direction","Both directions","None","None"],a:0},
-    {q:"Capacitor stores?",o:["Charge","Current","Voltage","None"],a:0},
-    {q:"AND gate outputs 1 when?",o:["All inputs are 1","Any input is 1","None","None"],a:0},
-    {q:"Microprocessor brain?",o:["CPU","RAM","ROM","None"],a:0},
-    {q:"Ohm is unit of?",o:["Resistance","Voltage","Current","None"],a:0},
-    {q:"Logic gates are?",o:["Digital","Analog","Hybrid","None"],a:0},
-    {q:"AC means?",o:["Alternating Current","Active Current","None","None"],a:0},
-    {q:"Transistor is used for?",o:["Amplification","Storage","Heating","None"],a:0}
-  ],
+aptitude: [
 
-  eee:[
-    {q:"Current unit?",o:["Ampere","Volt","Ohm","None"],a:0},
-    {q:"Transformer works on?",o:["AC","DC","Both","None"],a:0},
-    {q:"Power unit?",o:["Watt","Joule","Volt","None"],a:0},
-    {q:"Battery supplies?",o:["DC","AC","Both","None"],a:0},
-    {q:"Resistance unit?",o:["Ohm","Volt","Amp","None"],a:0},
-    {q:"Motor converts?",o:["Electrical to Mechanical","Mechanical to Electrical","None","None"],a:0},
-    {q:"Generator converts?",o:["Mechanical to Electrical","Electrical to Heat","None","None"],a:0},
-    {q:"Fuse is used for?",o:["Protection","Storage","Control","None"],a:0},
-    {q:"Power formula?",o:["VI","IR","V/R","None"],a:0},
-    {q:"Earth wire color?",o:["Green","Red","Blue","None"],a:0}
-  ],
+ {q:"10+20?",o:["30","20","40","10"],a:0},
+ {q:"5×6?",o:["30","25","20","40"],a:0},
+ {q:"100÷4?",o:["25","20","30","10"],a:0},
+ {q:"Square of 8?",o:["64","72","56","81"],a:0},
+ {q:"15% of 200?",o:["30","20","40","25"],a:0},
+ {q:"Cube of 3?",o:["27","9","81","6"],a:0},
+ {q:"LCM of 6,12?",o:["12","6","18","24"],a:0},
+ {q:"Average of 4,8?",o:["6","5","7","8"],a:0},
+ {q:"20% of 100?",o:["20","10","30","40"],a:0},
+ {q:"Profit = ?",o:["SP-CP","CP-SP","SP+CP","None"],a:0}
 
-  civil:[
-    {q:"RCC stands for?",o:["Reinforced Cement Concrete","Road Construction","None","None"],a:0},
-    {q:"Concrete mix ratio?",o:["1:2:4","1:1:1","2:3:4","None"],a:0},
-    {q:"Beam resists?",o:["Bending","Tension","None","None"],a:0},
-    {q:"Foundation purpose?",o:["Support","Decoration","None","None"],a:0},
-    {q:"Brick is made of?",o:["Clay","Sand","Cement","None"],a:0},
-    {q:"Cement main ingredient?",o:["Limestone","Sand","Clay","None"],a:0},
-    {q:"Surveying measures?",o:["Land","Water","None","None"],a:0},
-    {q:"Column resists?",o:["Compression","Tension","None","None"],a:0},
-    {q:"DPC prevents?",o:["Moisture","Load","None","None"],a:0},
-    {q:"Plaster gives?",o:["Finish","Strength","None","None"],a:0}
-  ],
+],
 
-  gk:[
-    {q:"Capital of India?",o:["Delhi","Mumbai","Chennai","Kolkata"],a:0},
-    {q:"National animal of India?",o:["Tiger","Lion","Elephant","Horse"],a:0},
-    {q:"National bird?",o:["Peacock","Crow","Parrot","Eagle"],a:0},
-    {q:"Largest ocean?",o:["Pacific","Indian","Atlantic","Arctic"],a:0},
-    {q:"Father of the Nation?",o:["Mahatma Gandhi","Nehru","Patel","Bose"],a:0},
-    {q:"Currency of India?",o:["Rupee","Dollar","Yen","Euro"],a:0},
-    {q:"Taj Mahal located in?",o:["Agra","Delhi","Jaipur","Mumbai"],a:0},
-    {q:"Largest continent?",o:["Asia","Africa","Europe","America"],a:0},
-    {q:"Indian flag colors?",o:["3","4","5","2"],a:0},
-    {q:"National flower?",o:["Lotus","Rose","Lily","None"],a:0}
-  ],
+movies: [
 
-  aptitude:[
-    {q:"10 + 20 = ?",o:["30","20","40","10"],a:0},
-    {q:"5 × 6 = ?",o:["30","20","25","40"],a:0},
-    {q:"100 / 4 = ?",o:["25","20","30","10"],a:0},
-    {q:"Square of 5?",o:["25","10","20","30"],a:0},
-    {q:"15% of 200?",o:["30","20","25","40"],a:0},
-    {q:"LCM of 2 & 4?",o:["4","2","6","8"],a:0},
-    {q:"Cube of 3?",o:["27","9","81","6"],a:0},
-    {q:"Average of 2 & 4?",o:["3","2","4","6"],a:0},
-    {q:"SI formula?",o:["PTR/100","PRT","PT/R","None"],a:0},
-    {q:"Profit formula?",o:["SP - CP","CP - SP","SP + CP","None"],a:0}
-  ],
+ {q:"Baahubali hero?",o:["Prabhas","NTR","Ram","Allu"],a:0},
+ {q:"RRR director?",o:["Rajamouli","Trivikram","Shankar","Sukumar"],a:0},
+ {q:"Bollywood King?",o:["SRK","Salman","Aamir","Akshay"],a:0},
+ {q:"KGF hero?",o:["Yash","Vijay","Surya","Ajith"],a:0},
+ {q:"3 Idiots hero?",o:["Aamir","SRK","Salman","Akshay"],a:0},
+ {q:"Pushpa hero?",o:["Allu Arjun","Ram","NTR","Vijay"],a:0},
+ {q:"Titanic actress?",o:["Kate Winslet","Emma","Scarlett","Anne"],a:0},
+ {q:"Avatar director?",o:["James Cameron","Nolan","Spielberg","Tarantino"],a:0},
+ {q:"Iron Man actor?",o:["RDJ","Chris","Tom","Mark"],a:0},
+ {q:"Bahubali director?",o:["Rajamouli","Shankar","Sukumar","Mani"],a:0}
 
-  english:[
-    {q:"Plural of child?",o:["Children","Childs","Childes","None"],a:0},
-    {q:"Synonym of fast?",o:["Quick","Slow","Late","None"],a:0},
-    {q:"Antonym of hot?",o:["Cold","Warm","Heat","None"],a:0},
-    {q:"Correct spelling?",o:["Beautiful","Beautifull","Beatiful","None"],a:0},
-    {q:"Article for apple?",o:["An","A","The","None"],a:0},
-    {q:"Opposite of big?",o:["Small","Large","Huge","None"],a:0},
-    {q:"Verb in sentence?",o:["Run","Blue","Fast","None"],a:0},
-    {q:"Plural of mouse?",o:["Mice","Mouses","Mouse","None"],a:0},
-    {q:"Synonym of happy?",o:["Joyful","Sad","Angry","None"],a:0},
-    {q:"Tense of 'is eating'?",o:["Present Continuous","Past","Future","None"],a:0}
-  ],
+],
 
-  sports:[
-    {q:"Cricket bat made of?",o:["Willow","Plastic","Steel","None"],a:0},
-    {q:"Players in football?",o:["11","10","9","12"],a:0},
-    {q:"Olympics held every?",o:["4 years","2 years","5 years","None"],a:0},
-    {q:"Tennis Grand Slam?",o:["Wimbledon","IPL","FIFA","None"],a:0},
-    {q:"World cricket body?",o:["ICC","BCCI","FIFA","None"],a:0},
-    {q:"Basketball hoop height?",o:["10 feet","12 feet","8 feet","None"],a:0},
-    {q:"Kabaddi originated in?",o:["India","China","Japan","None"],a:0},
-    {q:"Chess Grandmaster?",o:["Anand","Sachin","Dhoni","None"],a:0},
-    {q:"Badminton shuttle?",o:["Feather","Plastic","Rubber","None"],a:0},
-    {q:"National sport of India?",o:["Hockey","Cricket","Football","None"],a:0}
-  ],
+sports: [
 
-  movies:[
-    {q:"First Indian film?",o:["Raja Harishchandra","Alam Ara","None","None"],a:0},
-    {q:"Oscar award relates to?",o:["Movies","Music","Sports","None"],a:0},
-    {q:"Titanic director?",o:["James Cameron","Spielberg","None","None"],a:0},
-    {q:"Bollywood actor?",o:["Shah Rukh Khan","Messi","Kohli","None"],a:0},
-    {q:"Avatar genre?",o:["Sci-Fi","Comedy","Drama","None"],a:0},
-    {q:"IMDb full form?",o:["Internet Movie Database","Movie DB","None","None"],a:0},
-    {q:"Cinema invented in?",o:["France","USA","India","None"],a:0},
-    {q:"Editing stage?",o:["Post-production","Production","Pre-production","None"],a:0},
-    {q:"Movie camera brand?",o:["ARRI","Canon","Sony","None"],a:0},
-    {q:"Actor performs?",o:["Roles","Songs","Dance","None"],a:0}
-  ],
+ {q:"Cricket bat made of?",o:["Willow","Steel","Plastic","Iron"],a:0},
+ {q:"Football players?",o:["11","10","9","12"],a:0},
+ {q:"Olympics every?",o:["4 years","2 years","5 years","6 years"],a:0},
+ {q:"Tennis Grand Slam?",o:["Wimbledon","IPL","ISL","NBA"],a:0},
+ {q:"Cricket body?",o:["ICC","BCCI","FIFA","IOC"],a:0},
+ {q:"Basketball height?",o:["10 feet","12 feet","8 feet","9 feet"],a:0},
+ {q:"Kabaddi from?",o:["India","China","Japan","USA"],a:0},
+ {q:"Chess GM?",o:["Anand","Dhoni","Sachin","Kohli"],a:0},
+ {q:"Shuttle type?",o:["Feather","Iron","Wood","Plastic"],a:0},
+ {q:"Hockey players?",o:["11","9","10","12"],a:0}
 
-  fun:[
-    {q:"Sky color?",o:["Blue","Red","Green","None"],a:0},
-    {q:"2 + 2 = ?",o:["4","3","5","None"],a:0},
-    {q:"😀 emoji means?",o:["Happy","Sad","Angry","None"],a:0},
-    {q:"Fastest animal?",o:["Cheetah","Lion","Dog","None"],a:0},
-    {q:"Rainbow has colors?",o:["7","5","6","None"],a:0},
-    {q:"Opposite of yes?",o:["No","Maybe","Ok","None"],a:0},
-    {q:"Sun rises in?",o:["East","West","North","None"],a:0},
-    {q:"Ice is?",o:["Cold","Hot","Warm","None"],a:0},
-    {q:"Water freezes at?",o:["0°C","10°C","100°C","None"],a:0},
-    {q:"Smile is?",o:["Expression","Sound","Food","None"],a:0}
-  ]
+],
+
+fun: [
+
+ {q:"Which is funny animal?",o:["Monkey","Lion","Tiger","Cow"],a:0},
+ {q:"Minions color?",o:["Yellow","Blue","Red","Green"],a:0},
+ {q:"Tom's friend?",o:["Jerry","Mickey","Donald","Goofy"],a:0},
+ {q:"Cartoon mouse?",o:["Mickey","Tom","Dora","Shinchan"],a:0},
+ {q:"Dora's friend?",o:["Boots","Tom","Jerry","Ben"],a:0},
+ {q:"Pikachu color?",o:["Yellow","Red","Blue","Black"],a:0},
+ {q:"Shinchan lives in?",o:["Japan","China","India","Korea"],a:0},
+ {q:"Smiley emoji?",o:["😊","😢","😡","😴"],a:0},
+ {q:"Emoji heart?",o:["❤️","💙","💛","💚"],a:0},
+ {q:"Teddy color?",o:["Brown","Black","White","Red"],a:0}
+
+],
+
+english: [
+
+ {q:"Plural of child?",o:["Children","Childs","Childes","None"],a:0},
+ {q:"Synonym of fast?",o:["Quick","Slow","Late","Weak"],a:0},
+ {q:"Antonym of hot?",o:["Cold","Warm","Heat","Fire"],a:0},
+ {q:"Correct spelling?",o:["Beautiful","Beautifull","Beatiful","None"],a:0},
+ {q:"Article for apple?",o:["An","A","The","None"],a:0},
+ {q:"Opposite of big?",o:["Small","Huge","Large","Tall"],a:0},
+ {q:"Verb?",o:["Run","Blue","Red","Big"],a:0},
+ {q:"Plural of mouse?",o:["Mice","Mouses","Mouse","None"],a:0},
+ {q:"Happy synonym?",o:["Joyful","Sad","Angry","Cry"],a:0},
+ {q:"Tense: He is running?",o:["Present Continuous","Past","Future","None"],a:0}
+
+],
+
+cse: [
+
+ {q:"CPU stands for?",o:["Central Processing Unit","Control Unit","Core Unit","None"],a:0},
+ {q:"RAM is?",o:["Volatile","Permanent","ROM","Disk"],a:0},
+ {q:"HTML used for?",o:["Web","Game","OS","AI"],a:0},
+ {q:"CSS used for?",o:["Styling","Logic","DB","CPU"],a:0},
+ {q:"Binary base?",o:["2","8","10","16"],a:0},
+ {q:"OS example?",o:["Windows","HTML","Python","CPU"],a:0},
+ {q:"IP means?",o:["Internet Protocol","Internal Program","Input Process","None"],a:0},
+ {q:"HTTP is?",o:["Protocol","Language","Compiler","OS"],a:0},
+ {q:"Not language?",o:["HTML","Java","C","Python"],a:0},
+ {q:"DBMS?",o:["Database Management System","Data MS","None","Binary"],a:0}
+
+],
+
+ece: [
+
+ {q:"IC means?",o:["Integrated Circuit","Internal Chip","Input Circuit","None"],a:0},
+ {q:"Frequency unit?",o:["Hertz","Volt","Ampere","Ohm"],a:0},
+ {q:"Diode flow?",o:["One way","Two way","None","Both"],a:0},
+ {q:"Capacitor stores?",o:["Charge","Voltage","Current","Heat"],a:0},
+ {q:"AND gate?",o:["All 1","Any 1","All 0","None"],a:0},
+ {q:"Transistor use?",o:["Amplify","Cool","Store","None"],a:0},
+ {q:"AC full form?",o:["Alternating Current","Active Current","Analog Current","None"],a:0},
+ {q:"Resistance unit?",o:["Ohm","Volt","Ampere","Watt"],a:0},
+ {q:"Digital circuits?",o:["Logic gates","Battery","Wire","None"],a:0},
+ {q:"Oscillator gives?",o:["Frequency","Voltage","Heat","Power"],a:0}
+
+],
+
+eee: [
+
+ {q:"Current unit?",o:["Ampere","Volt","Ohm","Watt"],a:0},
+ {q:"Transformer works?",o:["AC","DC","Both","None"],a:0},
+ {q:"Battery gives?",o:["DC","AC","Both","None"],a:0},
+ {q:"Power unit?",o:["Watt","Volt","Ampere","Ohm"],a:0},
+ {q:"Fuse purpose?",o:["Protection","Storage","Measure","None"],a:0},
+ {q:"Motor converts?",o:["Electrical to Mechanical","Mechanical to Electrical","Both","None"],a:0},
+ {q:"Generator converts?",o:["Mechanical to Electrical","Electrical to Heat","Both","None"],a:0},
+ {q:"Earth wire?",o:["Green","Red","Blue","Black"],a:0},
+ {q:"Power formula?",o:["VI","IR","V/R","None"],a:0},
+ {q:"Resistance?",o:["Ohm","Volt","Ampere","Watt"],a:0}
+
+],
+
+civil: [
+
+ {q:"RCC means?",o:["Reinforced Cement Concrete","Road Concrete","None","Both"],a:0},
+ {q:"Concrete mix?",o:["1:2:4","1:1:1","2:3:4","None"],a:0},
+ {q:"Beam resists?",o:["Bending","Compression","Tension","None"],a:0},
+ {q:"Column resists?",o:["Compression","Tension","Shear","None"],a:0},
+ {q:"Brick made of?",o:["Clay","Sand","Cement","Stone"],a:0},
+ {q:"Cement raw?",o:["Limestone","Sand","Clay","Iron"],a:0},
+ {q:"Foundation?",o:["Support","Decoration","Design","None"],a:0},
+ {q:"DPC stops?",o:["Moisture","Heat","Load","None"],a:0},
+ {q:"Plaster for?",o:["Finishing","Strength","Support","None"],a:0},
+ {q:"Surveying?",o:["Land measurement","Water","Air","None"],a:0}
+
+]
+
 };
+let domain = localStorage.getItem("qs_domain");
 
-/* ===== QUIZ LOGIC ===== */
-const domain = localStorage.getItem("qs_domain");
+if(!domain || !QUESTION_POOL[domain]){
+  domain = "gk"; // default
+}
+
+const questions = QUESTION_POOL[domain];
+
+
+
+/* ---------------- STATE ---------------- */
+
 const mode = localStorage.getItem("qs_mode") || "practice";
-const questions = QB[domain];
 
-let index=0, answers=Array(10).fill(null), marked=Array(10).fill(false);
-const timerEl=document.getElementById("timer");
+let index = 0;
+let answers = Array(questions.length).fill(null);
+let marked = Array(questions.length).fill(false);
+let finished = false;
 
-let time=600, timer=null;
-if(mode==="challenge"){
-  timer=setInterval(()=>{
-    timerEl.innerText=`Time: ${Math.floor(time/60)}:${String(time%60).padStart(2,"0")}`;
-    if(--time<0) submitQuiz();
+
+/* ---------------- TIMER ---------------- */
+
+let time = 600;
+let timerInterval = null;
+
+const timerBox = document.getElementById("timer");
+
+if(mode === "challenge"){
+
+  timerInterval = setInterval(()=>{
+
+    timerBox.innerText =
+      Math.floor(time/60) + ":" +
+      String(time%60).padStart(2,"0");
+
+    if(--time < 0){
+      submitQuiz();
+    }
+
   },1000);
-}else timerEl.innerText="Practice Mode";
+
+}
+else{
+  timerBox.innerText = "Practice Mode";
+}
+
+
+/* ---------------- LOAD QUESTION ---------------- */
 
 function loadQ(){
-  qNo.innerText=`Question ${index+1}/10`;
-  question.innerText=questions[index].q;
-  questionBox.className=marked[index]?"question-box marked":"question-box";
-  options.innerHTML="";
-  questions[index].o.forEach((o,i)=>{
-    const b=document.createElement("button");
-    b.innerText=o;
-    if(answers[index]===i) b.classList.add("selected");
-    b.onclick=()=>{answers[index]=i;updateStatus();loadQ();};
-    options.appendChild(b);
+
+  document.getElementById("qNo").innerText =
+    `Question ${index+1}/${questions.length}`;
+
+  document.getElementById("question").innerText =
+    questions[index].q;
+
+  const optionsBox = document.getElementById("options");
+  optionsBox.innerHTML = "";
+
+  questions[index].o.forEach((opt,i)=>{
+
+    const btn = document.createElement("button");
+    btn.innerText = opt;
+
+    if(answers[index] === i){
+      btn.classList.add("selected");
+    }
+
+    btn.onclick = ()=>{
+      answers[index] = i;
+      updateStatus();
+      loadQ();
+    };
+
+    optionsBox.appendChild(btn);
   });
-  updateStatus();
+
+  // ✅ CORRECT SUBMIT VISIBILITY
+  document.getElementById("submitBtn").style.display =
+    (index === questions.length - 1) ? "block" : "none";
 }
 
-function updateStatus(){
-  attempted.innerText=answers.filter(a=>a!==null).length;
-  notAttempted.innerText=answers.filter(a=>a===null).length;
-  markedCount.innerText=marked.map((m,i)=>m?i+1:null).filter(Boolean).join(",")||0;
-  submitBtn.style.display=!answers.includes(null)?"block":"none";
+
+/* ---------------- NAVIGATION ---------------- */
+
+function prevQ(){
+  if(index>0){
+    index--;
+    loadQ();
+  }
 }
 
 function nextQ(){
-  if(index===9 && answers.includes(null)){alert("You missed some questions");return;}
-  if(index<9){index++;loadQ();}
+  if(index<questions.length-1){
+    index++;
+    loadQ();
+  }
 }
-function prevQ(){if(index>0){index--;loadQ();}}
-function markQ(){marked[index]=!marked[index];updateStatus();loadQ();}
 
+
+/* ---------------- MARK ---------------- */
+
+function markQ(){
+
+  marked[index] = !marked[index];
+  updateStatus();
+
+}
+
+
+/* ---------------- STATUS ---------------- */
+
+function updateStatus(){
+
+  document.getElementById("attempted").innerText =
+    answers.filter(a=>a!==null).length;
+
+  document.getElementById("notAttempted").innerText =
+    questions.length - answers.filter(a=>a!==null).length;
+
+  document.getElementById("markedCount").innerText =
+    marked.filter(m=>m).length;
+
+}
 function submitQuiz(){
-  if(timer) clearInterval(timer);
-  document.body.style.overflow="auto";
-  let score=0, wrongHTML="";
-  questions.forEach((q,i)=>{
-    if(answers[i]===q.a) score++;
-    else wrongHTML+=`
-      <div class="wrong">
-        <b>Q${i+1}:</b> ${q.q}<br>
-        Your Answer: ${answers[i]!=null?q.o[answers[i]]:"Not Answered"}<br>
-        <span class="correct">Correct: ${q.o[q.a]}</span>
-      </div>`;
+
+  if (finished) return;
+  finished = true;
+
+  // stop timer safely
+  if (timerInterval) clearInterval(timerInterval);
+
+  // hide submit button
+  document.getElementById("submitBtn").style.display = "none";
+
+  // disable navigation after submit
+  document.querySelector(".controls").style.pointerEvents = "none";
+
+  // calculate score
+  let score = 0;
+  questions.forEach((q, i) => {
+    if (answers[i] === q.a) score++;
   });
 
-  if(mode==="challenge" && score===10){
-    localStorage.setItem("qs_certificate",JSON.stringify({
-      name:localStorage.getItem("qs_user"),
-      domain:domain,
-      date:new Date().toLocaleDateString()
-    }));
-    alert("🎉 Congratulations! You won ₹500");
-    location.href="certificate.html";
+  const optionsBox = document.getElementById("options");
+  optionsBox.innerHTML = "";
+
+  let hasWrong = false;
+
+  /* ========== SHOW ONLY WRONG ANSWERS ========== */
+  questions.forEach((q, qi) => {
+
+    if (answers[qi] !== q.a) {
+
+      hasWrong = true;
+
+      const qDiv = document.createElement("div");
+      qDiv.style.margin = "15px 0 8px";
+      qDiv.innerHTML = `<b>Q${qi + 1}. ${q.q}</b>`;
+      optionsBox.appendChild(qDiv);
+
+      q.o.forEach((opt, oi) => {
+
+        const div = document.createElement("div");
+        div.style.padding = "10px";
+        div.style.marginBottom = "6px";
+        div.style.borderRadius = "6px";
+        div.style.pointerEvents = "none";
+
+        if (oi === q.a) {
+          div.className = "correct";
+          div.innerText = opt + " ✔ Correct";
+        }
+        else if (oi === answers[qi]) {
+          div.className = "wrong";
+          div.innerText = opt + " ✖ Your Answer";
+        }
+        else {
+          div.innerText = opt;
+        }
+
+        optionsBox.appendChild(div);
+      });
+    }
+  });
+
+  /* ========== PERFECT SCORE → SAVE CERTIFICATE ========== */
+  if (mode === "challenge" && score === questions.length) {
+
+    let certs = JSON.parse(localStorage.getItem("qs_certificates") || "[]");
+
+    // prevent duplicate certificate
+    const exists = certs.some(
+      c => c.domain === domain && c.score === `${score}/${questions.length}`
+    );
+
+    if (!exists) {
+      certs.push({
+        score: `${score}/${questions.length}`,
+        domain: domain,
+        date: new Date().toLocaleDateString()
+      });
+    }
+
+    localStorage.setItem("qs_certificates", JSON.stringify(certs));
+
+    // show centered win screen
+    document.querySelector(".header").style.display = "none";
+    document.querySelector(".status-box").style.display = "none";
+    document.querySelector(".controls").style.display = "none";
+    document.getElementById("question").style.display = "none";
+    document.getElementById("options").style.display = "none";
+
+    document.getElementById("winScreen").style.display = "flex";
     return;
   }
 
-  quizBox.outerHTML=`
-    <div class="result-box">
-      <h2>Result</h2>
-      <p><b>Score: ${score}/10</b></p>
-      ${wrongHTML||"<p class='correct'>Perfect Score 🎉</p>"}
-      <button onclick="location.href='mode.html'">Back to Mode</button>
-    </div>`;
+  // show back button only if wrong answers exist
+  if (hasWrong) {
+    document.getElementById("backBtn").style.display = "block";
+  }
 }
 
-document.addEventListener("visibilitychange",()=>{
-  if(document.hidden && mode==="challenge") submitQuiz();
-});
+
+function goBack(){
+  location.href = "mode.html"; // change if your file name is different
+}
+
+function goCertificate(){
+  location.href = "certificate.html";
+}
+
+/* ---------------- START ---------------- */
 
 loadQ();
+updateStatus();
+
 </script>
 
 </body>
