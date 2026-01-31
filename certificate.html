@@ -11,7 +11,6 @@
   font-family:Arial, Helvetica, sans-serif;
 }
 
-/* BODY (SAME AS CATEGORY) */
 body{
   margin:0;
   min-height:100vh;
@@ -19,7 +18,6 @@ body{
   background:linear-gradient(to right,#141E30,#243B55);
 }
 
-/* PAGE WRAPPER (KEY FIX) */
 .page-wrapper{
   min-height:calc(100vh - 70px);
   display:flex;
@@ -27,7 +25,6 @@ body{
   align-items:center;
 }
 
-/* CERTIFICATE */
 .certificate{
   background:#fff;
   width:95%;
@@ -43,28 +40,34 @@ body{
   margin-bottom:10px;
   color:#ff9800;
 }
+
 .certificate p{
   font-size:16px;
   color:#555;
 }
+
 .name{
   font-size:26px;
   font-weight:bold;
   color:#000;
   margin:15px 0;
 }
+
 .domain{
   font-weight:bold;
   color:#1976d2;
 }
+
 .date{
   margin-top:20px;
   font-size:14px;
   color:#777;
 }
+
 .actions{
   margin-top:30px;
 }
+
 .actions button{
   padding:12px 20px;
   font-size:15px;
@@ -74,31 +77,33 @@ body{
   cursor:pointer;
   margin:6px;
 }
+
 .back{background:#1976d2;color:#fff;}
 .print{background:#2e7d32;color:#fff;}
+
+.error{
+  background:#fff;
+  padding:30px;
+  border-radius:14px;
+  text-align:center;
+  max-width:600px;
+}
+.error h2{color:#d32f2f;}
 </style>
 </head>
 
 <body>
 
-<!-- ================= GLOBAL HEADER ================= -->
-<div id="header"></div>
-
-<!-- ================= CONTENT ================= -->
 <div class="page-wrapper">
-  <div class="certificate" id="certificateBox"></div>
+  <div id="content"></div>
 </div>
 
 <script>
-/* ===== STRICT ACCESS GUARD ===== */
-const cert = JSON.parse(localStorage.getItem("qs_certificate"));
+/* ========= READ STORAGE (FIXED) ========= */
+const user = localStorage.getItem("qs_user");
+const certArray = JSON.parse(localStorage.getItem("qs_certificates") || "[]");
 
-if(!cert){
-  alert("No certificate available.\nComplete Challenge Mode with 10/10.");
-  location.href="mode.html";
-}
-
-/* ===== DOMAIN NAME MAP ===== */
+/* ========= DOMAIN MAP ========= */
 const domainMap = {
   cse: "Computer Science",
   ece: "Electronics",
@@ -112,50 +117,66 @@ const domainMap = {
   fun: "Fun"
 };
 
-const userName = cert.name || "QuizSphere User";
-const domainName = domainMap[cert.domain.toLowerCase()] || cert.domain;
-const issueDate = cert.date || new Date().toLocaleDateString();
+const content = document.getElementById("content");
 
-/* ===== RENDER CERTIFICATE ===== */
-document.getElementById("certificateBox").innerHTML = `
-  <h1>Certificate of Achievement</h1>
+/* ========= VALIDATION ========= */
+if(!user || certArray.length === 0){
+  content.innerHTML = `
+    <div class="error">
+      <h2>Certificate Not Available</h2>
+      <p>
+        You must complete <b>Challenge Mode</b> with a perfect score
+        to unlock the certificate.
+      </p>
+      <button class="back" onclick="goBack()">Go to Mode Selection</button>
+    </div>
+  `;
+}else{
 
-  <p>This is to certify that</p>
+  /* ✅ GET LATEST CERTIFICATE */
+  const cert = certArray[certArray.length - 1];
 
-  <div class="name">${userName}</div>
+  const userName = user;
+  const domainKey = (cert.domain || "").toLowerCase();
+  const domainName = domainMap[domainKey] || cert.domain;
+  const issueDate = cert.date || new Date().toLocaleDateString();
 
-  <p>
-    has successfully completed the
-    <span class="domain">${domainName}</span> quiz
-    in <b>Challenge Mode</b> with a perfect score of <b>10 / 10</b>.
-  </p>
+  content.innerHTML = `
+    <div class="certificate">
+      <h1>Certificate of Achievement</h1>
 
-  <div class="date">
-    Date Issued: ${issueDate}
-  </div>
+      <p>This is to certify that</p>
 
-  <div class="actions">
-    <button class="print" onclick="printCert()">Download / Print</button>
-    <button class="back" onclick="goBack()">Back to Mode</button>
-  </div>
-`;
+      <div class="name">${userName}</div>
 
-/* ===== ACTIONS ===== */
+      <p>
+        has successfully completed the
+        <span class="domain">${domainName}</span> quiz
+        in <b>Challenge Mode</b> with a perfect score of
+        <b>${cert.score}</b>.
+      </p>
+
+      <div class="date">
+        Date Issued: ${issueDate}
+      </div>
+
+      <div class="actions">
+        <button class="print" onclick="printCert()">Download / Print</button>
+        <button class="back" onclick="goBack()">Back to Mode</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ========= ACTIONS ========= */
 function printCert(){
   window.print();
 }
 
 function goBack(){
-  localStorage.removeItem("qs_certificate");
-  location.href="mode.html";
+  location.href = "mode.html";
 }
 </script>
-
-<!-- ================= GLOBAL FOOTER ================= -->
-<div id="footer"></div>
-
-<!-- ================= GLOBAL FOOTER LOADER ================= -->
-<script src="/layout.js"></script>
 
 </body>
 </html>
